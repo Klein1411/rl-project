@@ -1,0 +1,18 @@
+# Gitignore for RL project
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+logs/
+checkpoints/
+*.egg-info/
+dist/
+build/
+.ipynb_checkpoints/
+
+# Generated training data
+web/maze_qtable.json
+web/maze_layout.json
+web/training_history.json
+web/solution.json
