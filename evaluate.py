@@ -11,12 +11,11 @@ def parse_args():
     parser.add_argument("--checkpoint", type=str, required=True,
                         help="Path to saved model checkpoint")
     parser.add_argument("--episodes", type=int, default=10,
-                        help="Number of evaluation episodes")
+                        help="Number of evaluation episodes") 
     parser.add_argument("--render", action="store_true",
                         help="Render the environment")
     parser.add_argument("--device", type=str, default="auto")
     return parser.parse_args()
-
 
 def main():
     args = parse_args()
