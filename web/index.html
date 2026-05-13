@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Reinforcement Learning Maze Solver - Watch a Q-Learning agent learn to navigate and escape mazes in real-time">
+    <title>AI Maze Solver — Reinforcement Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header" id="header">
+            <div class="header-glow"></div>
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">AI</span>
+                    <div class="logo-text">
+                        <h1 id="main-heading">AI Maze Solver</h1>
+                        <span class="logo-subtitle">Q-Learning Reinforcement Learning</span>
+                    </div>
+                </div>
+                <div class="header-badges">
+                    <span class="badge badge-algo" id="badge-algo">Q-Learning</span>
+                    <span class="badge badge-status" id="badge-status">Ready</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel: Maze -->
+            <section class="maze-section" id="maze-section">
+                <div class="section-header">
+                    <h2>Maze Arena</h2>
+                    <div class="maze-info">
+                        <span class="info-item" id="maze-size-label">10 × 10</span>
+                    </div>
+                </div>
+                <div class="canvas-wrapper" id="canvas-wrapper">
+                    <canvas id="maze-canvas" width="600" height="600"></canvas>
+                    <div class="canvas-overlay" id="canvas-overlay">
+                        <span class="overlay-text">Click "Generate Maze" to start</span>
+                    </div>
+                </div>
+                <div class="maze-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot legend-start"></span>
+                        <span>Start</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot legend-goal"></span>
+                        <span>Goal</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot legend-agent"></span>
+                        <span>Agent</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot legend-path"></span>
+                        <span>Visited</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Controls + Stats -->
+            <aside class="control-section" id="control-section">
+                <!-- Maze Settings -->
+                <div class="control-card" id="settings-card">
+                    <h3 class="card-title">Maze Settings</h3>
+                    <div class="control-group">
+                        <label for="maze-size">Maze Size</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="maze-size" min="5" max="25" value="10" step="1">
+                            <span class="range-value" id="maze-size-value">10 × 10</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="btn-generate">Generate Maze</button>
+                    <button class="btn btn-secondary" id="btn-load-python">Load from Python</button>
+                </div>
+
+                <!-- Training Controls -->
+                <div class="control-card" id="training-card">
+                    <h3 class="card-title">Training</h3>
+                    <div class="control-group">
+                        <label for="train-episodes">Episodes</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="train-episodes" min="100" max="5000" value="500" step="100">
+                            <span class="range-value" id="train-episodes-value">500</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="learning-rate">Learning Rate (α)</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="learning-rate" min="0.01" max="0.5" value="0.1" step="0.01">
+                            <span class="range-value" id="learning-rate-value">0.10</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="discount-factor">Discount (γ)</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="discount-factor" min="0.5" max="1.0" value="0.99" step="0.01">
+                            <span class="range-value" id="discount-factor-value">0.99</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="animation-speed">Animation Speed</label>
+                        <div class="range-wrapper">
+                            <input type="range" id="animation-speed" min="1" max="100" value="50" step="1">
+                            <span class="range-value" id="animation-speed-value">50</span>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-accent" id="btn-train" disabled>Train Agent</button>
+                        <button class="btn btn-warning" id="btn-stop" disabled>Stop</button>
+                    </div>
+                </div>
+
+                <!-- Agent Controls -->
+                <div class="control-card" id="agent-card">
+                    <h3 class="card-title">Agent</h3>
+                    <div class="btn-group">
+                        <button class="btn btn-success" id="btn-solve" disabled>Solve Maze</button>
+                        <button class="btn btn-secondary" id="btn-reset-agent">Reset</button>
+                    </div>
+                </div>
+
+                <!-- Stats Panel -->
+                <div class="control-card stats-card" id="stats-card">
+                    <h3 class="card-title">Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Episode</span>
+                            <span class="stat-value" id="stat-episode">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Reward</span>
+                            <span class="stat-value" id="stat-reward">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Steps</span>
+                            <span class="stat-value" id="stat-steps">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Epsilon (ε)</span>
+                            <span class="stat-value" id="stat-epsilon">1.000</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Solve Rate</span>
+                            <span class="stat-value" id="stat-solve-rate">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Q-Entries</span>
+                            <span class="stat-value" id="stat-q-entries">0</span>
+                        </div>
+                    </div>
+                    <!-- Mini Chart -->
+                    <div class="chart-wrapper">
+                        <canvas id="chart-canvas" width="340" height="120"></canvas>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer" id="footer">
+            <span>Built with Q-Learning | Python + JavaScript</span>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
